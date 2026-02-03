@@ -11,11 +11,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      overflow: hidden;
+      min-height: 100vh; /* fix for iPhone */
+      padding: 20px;     /* prevent card from being cut off */
+      box-sizing: border-box;
       background: linear-gradient(135deg, #ff758c, #ff7eb3);
       font-family: 'Segoe UI', sans-serif;
       text-align: center;
+      overflow-x: hidden; /* prevent horizontal scroll */
     }
 
     .card {
@@ -53,6 +55,8 @@
       cursor: pointer;
       margin: 10px;
       transition: 0.3s ease;
+      position: relative;
+      z-index: 5; /* ensure it stays above hearts */
     }
 
     #yesBtn {
@@ -67,7 +71,6 @@
     #noBtn {
       background: #adb5bd;
       color: white;
-      position: relative;
     }
 
     #message {
@@ -84,11 +87,29 @@
       font-size: 20px;
       animation: float 6s linear infinite;
       opacity: 0.7;
+      z-index: 1; /* behind buttons */
     }
 
     @keyframes float {
       0% { transform: translateY(100vh) scale(0.5); }
       100% { transform: translateY(-10vh) scale(1.2); }
+    }
+
+    /* Mobile tweaks */
+    @media (max-width: 400px) {
+      .card {
+        width: 90%;
+        padding: 20px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
     }
   </style>
 </head>
@@ -124,8 +145,14 @@
 
     function moveNo() {
       const btn = document.getElementById('noBtn');
-      const x = Math.random() * 200 - 100;
-      const y = Math.random() * 200 - 100;
+      const isMobile = window.innerWidth <= 400;
+
+      // Reduce movement range on small screens
+      const range = isMobile ? 120 : 200;
+
+      const x = Math.random() * range - range/2;
+      const y = Math.random() * range - range/2;
+
       btn.style.transform = `translate(${x}px, ${y}px)`;
     }
 
@@ -145,4 +172,3 @@
 
 </body>
 </html>
-
